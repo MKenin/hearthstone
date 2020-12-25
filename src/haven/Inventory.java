@@ -30,11 +30,12 @@ import java.util.*;
 import java.awt.image.WritableRaster;
 
 public class Inventory extends Widget implements DTarget {
-    public static final Coord sqsz = UI.scale(new Coord(33, 33));
+	public static final Coord sqsz = UI.scale(new Coord(33, 33));
+	private static final Comparator<WItem> sortTransfer = (WItem w1, WItem w2) -> w1.item.getQuality().compareTo(w2.item.getQuality());
     public static final Tex invsq;
     public boolean dropul = true;
     public Coord isz;
-    Map<GItem, WItem> wmap = new HashMap<GItem, WItem>();
+	Map<GItem, WItem> wmap = new HashMap<GItem, WItem>();
 
     static {
 	Coord sz = sqsz.add(1, 1);
@@ -135,8 +136,7 @@ public class Inventory extends Widget implements DTarget {
 	@Override
     public void wdgmsg(Widget sender, String msg, Object... args) {
         if(msg.equals("transfer-all")) {
-			List<WItem> items = getitems((String) args[0]);
-			Comparator<WItem> sortTransfer =  (WItem w1, WItem w2) -> w1.item.getQuality().compareTo(w2.item.getQuality());				
+			List<WItem> items = getitems((String) args[0]);						
 			Collections.sort(items, ((Integer)args[1]) == 1 ? sortTransfer : sortTransfer.reversed());									
             for (WItem item : items)
                 item.item.wdgmsg("transfer", Coord.z, 1);
@@ -149,7 +149,7 @@ public class Inventory extends Widget implements DTarget {
 		List<WItem> items = new ArrayList<WItem>();
 		if(name == null)
 			return items;
-			
+
         for (Widget wdg = child; wdg != null; wdg = wdg.next) {
                 if (wdg instanceof WItem) {
                     if (name.equals(((WItem)wdg).item.getName()))

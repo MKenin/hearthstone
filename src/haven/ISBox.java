@@ -86,7 +86,12 @@ public class ISBox extends Widget implements DTarget {
             else
                 wdgmsg("click");
             return(true);
+        } else if(button == 3 && ui.modshift) {
+            for (int i = 0; i < 7*8; i++)
+                wdgmsg("xfer");
+            return true;
         }
+
         return(false);
     }
     
