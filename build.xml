@@ -87,10 +87,21 @@
     </copy>
   </target>
   
-  <target name="deftgt" depends="jars, appletview" />
+  <target name="deftgt" depends="jars, appletview"/>
 
   <target name="run" depends="jars">
-    <java jar="build/hafen.jar" fork="true" />
+    <java jar="build/hafen.jar" fork="true">
+      <arg line="-U https://game.havenandhearth.com/res/ game.havenandhearth.com"/>
+    </java>
+  </target>
+
+  <target name="debug" depends="jars">
+    <java jar="build/hafen.jar" fork="true">
+      <jvmarg value="-Xdebug"/>
+      <jvmarg value="-Xnoagent"/>
+      <jvmarg value="-Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=y"/>
+      <arg line="-U https://game.havenandhearth.com/res/ game.havenandhearth.com"/>
+    </java>
   </target>
   
   <target name="clean">
