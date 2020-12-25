@@ -34,7 +34,7 @@ import java.awt.Graphics;
 
 public abstract class ItemInfo {
     public final Owner owner;
-    
+	
     public interface Owner extends OwnerContext {
 	@Deprecated
 	public default Glob glob() {return(context(Glob.class));}
@@ -52,7 +52,7 @@ public abstract class ItemInfo {
     public static class Raw {
 	public final Object[] data;
 	public final double time;
-
+	
 	public Raw(Object[] data, double time) {
 	    this.data = data;
 	    this.time = time;

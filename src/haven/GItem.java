@@ -39,6 +39,27 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
     private GSprite spr;
     private ItemInfo.Raw rawinfo;
     private List<ItemInfo> info = Collections.emptyList();
+	
+	private Double _quality = null;
+	public Double getQuality() {
+		if(_quality == null){
+			try {
+				for (ItemInfo info : this.info()) {				
+					if (info.getClass().getSimpleName() == "Quality") {
+						_quality = (Double)info.getClass().getField("q").get(info);
+						break;
+					}
+				}			
+			} 
+			catch (Loading l) {
+			}
+			catch (NoSuchFieldException l) {	
+			}
+			catch (IllegalAccessException l) {	
+			}
+		}
+		return _quality;
+	}
 
     @RName("item")
     public static class $_ implements Factory {

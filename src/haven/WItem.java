@@ -29,9 +29,11 @@ package haven;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.awt.geom.Arc2D;
 import java.util.*;
 import java.util.function.*;
 import haven.ItemInfo.AttrCache;
+import haven.extension.QualityHelper;
 import static haven.ItemInfo.find;
 import static haven.Inventory.sqsz;
 
@@ -177,7 +179,7 @@ public class WItem extends Widget implements DTarget {
 	    g.defstate();
 	    if(olcol.get() != null)
 		g.usestate(new ColorMask(olcol.get()));
-	    drawmain(g, spr);
+		drawmain(g, spr);		
 	    g.defstate();
 	    GItem.InfoOverlay<?>[] ols = itemols.get();
 	    if(ols != null) {
@@ -190,7 +192,18 @@ public class WItem extends Widget implements DTarget {
 		Coord half = sz.div(2);
 		g.prect(half, half.inv(), half, meter * Math.PI * 2);
 		g.chcolor();
-	    }
+		}
+				
+		Double quality = item.getQuality();
+		if(quality != null)
+		{
+			Text qText = Text.render(Math.round(quality) + "");
+			int radius = QualityHelper.BackgroundRadius();
+			g.chcolor(0, 0, 0, 128);
+			g.fellipse(g.sz(), new Coord(radius, radius), Math.PI / 2, Math.PI);
+			g.chcolor();
+			g.image(qText.tex(), new Coord(g.sz().x - qText.sz().x, g.sz().y -  qText.sz().y - 1));
+		}
 	} else {
 	    g.image(missing.layer(Resource.imgc).tex(), Coord.z, sz);
 	}
