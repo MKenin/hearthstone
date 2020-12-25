@@ -146,10 +146,13 @@ public class Inventory extends Widget implements DTarget {
     }
 		
 	private List<WItem> getitems(String name) {
-        List<WItem> items = new ArrayList<WItem>();
+		List<WItem> items = new ArrayList<WItem>();
+		if(name == null)
+			return items;
+			
         for (Widget wdg = child; wdg != null; wdg = wdg.next) {
                 if (wdg instanceof WItem) {
-                    if (((WItem)wdg).item.resource().name.equals(name))
+                    if (name.equals(((WItem)wdg).item.getName()))
                         items.add((WItem)wdg);
                 }
         }

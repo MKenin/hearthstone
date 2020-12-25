@@ -30,6 +30,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.*;
+import haven.Text;
 
 public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owner {
     public Indir<Resource> res;
@@ -44,13 +45,13 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
 	public Double getQuality() {
 		if(_quality == null){
 			try {
-				for (ItemInfo info : this.info()) {				
+				for (ItemInfo info : this.info()) {								
 					if (info.getClass().getSimpleName() == "Quality") {
 						_quality = (Double)info.getClass().getField("q").get(info);
 						break;
 					}
 				}			
-			} 
+			}
 			catch (Loading l) {
 			}
 			catch (NoSuchFieldException l) {	
@@ -59,6 +60,28 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
 			}
 		}
 		return _quality;
+	}
+
+	private String _name = null;
+	public String getName() {
+		if(_name == null){
+			try {
+				for (ItemInfo info : this.info()) {					
+					if (info.getClass().getName() == "haven.ItemInfo$Name") {
+						_name = ((Text)info.getClass().getField("str").get(info)).text;
+						break;
+					}
+				}			
+			} 
+			catch (Loading l) {
+				System.out.println(l.toString());
+			}
+			catch (NoSuchFieldException l) {	
+			}
+			catch (IllegalAccessException l) {	
+			}
+		}
+		return _name;
 	}
 
     @RName("item")

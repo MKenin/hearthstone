@@ -214,7 +214,7 @@ public class WItem extends Widget implements DTarget {
 	    if(ui.modshift) {		
 			if(ui.modmeta)
 			{
-				wdgmsg("transfer-all", item.resource().name, 1);
+				wdgmsg("transfer-all", item.getName(), 1);
 			} else {
 				item.wdgmsg("transfer", c, 1);
 			}
@@ -228,7 +228,7 @@ public class WItem extends Widget implements DTarget {
 	} else if(btn == 3) {
 		if(ui.modshift && ui.modmeta)
 		{
-			wdgmsg("transfer-all", item.resource().name, -1);
+			wdgmsg("transfer-all", item.getName(), -1);
 		}
 		else {
 			item.wdgmsg("iact", c, ui.modflags());
