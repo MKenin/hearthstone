@@ -211,9 +211,13 @@ public class WItem extends Widget implements DTarget {
 
     public boolean mousedown(Coord c, int btn) {
 	if(btn == 1) {
-	    if(ui.modshift) {
-		int n = ui.modctrl ? -1 : 1;
-		item.wdgmsg("transfer", c, n);
+	    if(ui.modshift) {		
+			if(ui.modmeta)
+			{
+				wdgmsg("transfer-all", item.resource().name, 1);
+			} else {
+				item.wdgmsg("transfer", c, 1);
+			}
 	    } else if(ui.modctrl) {
 		int n = ui.modmeta ? -1 : 1;
 		item.wdgmsg("drop", c, n);
@@ -222,7 +226,13 @@ public class WItem extends Widget implements DTarget {
 	    }
 	    return(true);
 	} else if(btn == 3) {
-	    item.wdgmsg("iact", c, ui.modflags());
+		if(ui.modshift && ui.modmeta)
+		{
+			wdgmsg("transfer-all", item.resource().name, -1);
+		}
+		else {
+			item.wdgmsg("iact", c, ui.modflags());
+		}
 	    return(true);
 	}
 	return(false);
@@ -235,5 +245,5 @@ public class WItem extends Widget implements DTarget {
     public boolean iteminteract(Coord cc, Coord ul) {
 	item.wdgmsg("itemact", ui.modflags());
 	return(true);
-    }
+	}
 }

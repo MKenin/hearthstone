@@ -130,5 +130,29 @@ public class Inventory extends Widget implements DTarget {
 	} else {
 	    super.uimsg(msg, args);
 	}
+	}
+
+	@Override
+    public void wdgmsg(Widget sender, String msg, Object... args) {
+        if(msg.equals("transfer-all")) {
+			List<WItem> items = getitems((String) args[0]);
+			Comparator<WItem> sortTransfer =  (WItem w1, WItem w2) -> w1.item.getQuality().compareTo(w2.item.getQuality());				
+			Collections.sort(items, ((Integer)args[1]) == 1 ? sortTransfer : sortTransfer.reversed());									
+            for (WItem item : items)
+                item.item.wdgmsg("transfer", Coord.z, 1);
+        } else {
+            super.wdgmsg(sender, msg, args);
+        }
+    }
+		
+	private List<WItem> getitems(String name) {
+        List<WItem> items = new ArrayList<WItem>();
+        for (Widget wdg = child; wdg != null; wdg = wdg.next) {
+                if (wdg instanceof WItem) {
+                    if (((WItem)wdg).item.resource().name.equals(name))
+                        items.add((WItem)wdg);
+                }
+        }
+        return items;
     }
 }
