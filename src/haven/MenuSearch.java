@@ -24,7 +24,7 @@ public class MenuSearch extends Window {
 	}
     }
 
-    private static final Text.Foundry elf = CharWnd.attrf;
+    private static final Text.Foundry elf = new Text.Foundry(Text.serif, 16);
     private static final int elh = elf.height() + UI.scale(2);
     public class Results extends Listbox<Result> {
 	private Results(int w, int h) {
