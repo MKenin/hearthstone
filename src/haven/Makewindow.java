@@ -33,6 +33,9 @@ import java.awt.image.BufferedImage;
 
 import static haven.Inventory.invsq;
 
+import haven.extension.Characteristics;
+import haven.extension.HavenMath;
+
 public class Makewindow extends Widget {
     List<Spec> inputs = Collections.emptyList();
     List<Spec> outputs = Collections.emptyList();
@@ -71,7 +74,7 @@ public class Makewindow extends Widget {
 	}
 
 	public void draw(GOut g) {
-	    try {
+		try {
 		if(spr == null)
 		    spr = GSprite.create(this, res.get(), sdt.clone());
 		spr.draw(g);
@@ -155,6 +158,7 @@ public class Makewindow extends Widget {
     public Makewindow(String rcpnm) {
 	add(new Label("Input:"), new Coord(0, UI.scale(8)));
 	add(new Label("Result:"), new Coord(0, outy + UI.scale(8)));
+	add(new Label("Softcap:"), new Coord(UI.scale(265), qmy + 4));
 	add(new Button(UI.scale(85), "Craft"), UI.scale(new Coord(265, 75))).action(() -> wdgmsg("make", 0)).setgkey(kb_make);
 	add(new Button(UI.scale(85), "Craft All"), UI.scale(new Coord(360, 75))).action(() -> wdgmsg("make", 1)).setgkey(kb_makeall);
 	pack();
@@ -222,16 +226,30 @@ public class Makewindow extends Widget {
 	    popt = opt;
 	}
 	if(qmod != null) {
+		int[] modifiers = new int[qmod.size()];
+		int index = 0;
 	    g.image(qmodl.tex(), new Coord(0, qmy + 4));
 	    c = new Coord(xoff, qmy);
 	    for(Indir<Resource> qm : qmod) {
 		try {
 		    Tex t = qmicon(qm);
-		    g.image(t, c);
-		    c = c.add(t.sz().x + UI.scale(1), 0);
+			g.image(t, c);
+			int width = t.sz().x + UI.scale(1);
+			c = c.add(width, 0);
+
+			int number = Characteristics.getByName(qm.get().basename());
+			modifiers[index++] = number;
+			Text cText = Text.render(number + "");
+			g.image(cText.tex(), c.add(width / 2 - cText.sz().x / 2, t.sz().y / 2 - cText.sz().y / 2));
+
+			c = c.add(width, 0);
 		} catch(Loading l) {
 		}
-	    }
+		}
+		
+		int softcap = HavenMath.expAverage(modifiers);
+		Text softcapText = Text.render(softcap + "");
+		g.image(softcapText.tex(), new Coord(UI.scale(360), qmy + 4));
 	}
 	c = new Coord(xoff, outy);
 	for(Spec s : outputs) {

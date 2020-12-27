@@ -31,6 +31,8 @@ import java.awt.Color;
 import haven.render.*;
 import haven.render.sl.*;
 
+import haven.extension.Game;
+
 public class Glob {
     public final OCache oc = new OCache(this);
     public final MCache map;
@@ -55,6 +57,7 @@ public class Glob {
 	this.sess = sess;
 	map = new MCache(sess);
 	party = new Party(this);
+	Game.Global = this;
     }
 
     @Resource.PublishedCode(name = "wtr")
@@ -66,7 +69,7 @@ public class Glob {
 
     public static class CAttr {
 	String nm;
-	int base, comp;
+	public int base, comp;
 	
 	public CAttr(String nm, int base, int comp) {
 	    this.nm = nm.intern();
