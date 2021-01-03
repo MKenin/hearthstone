@@ -1829,7 +1829,39 @@ public class MapView extends PView implements DTarget, Console.Directory {
 		args = Utils.extend(args, inf.clickargs());
 	    wdgmsg("click", args);
 	}
-    }
+	}
+	
+	private class Peek extends Hittest {
+		private Peek(Coord c) {
+			super(c);
+		}
+		
+		public void hit(Coord pc, Coord2d mc, ClickData inf) 
+		{
+			if(inf != null && inf.ci != null && inf.ci.getClass().getName() == "haven.Gob$GobClick")
+			{
+				Gob target = null;
+				try {
+					target = (Gob)inf.ci.getClass().getField("gob").get(inf.ci);	
+				}
+				catch (IllegalAccessException e) {}
+				catch (NoSuchFieldException e) {}
+
+				if(target == null)
+					return;
+
+				Drawable drawableTarget = target.getattr(Drawable.class);
+				tooltip = drawableTarget.getres().name;
+				return;
+			}
+
+			tooltip = null;
+		}
+
+		public void nohit(Coord pc) {
+			tooltip = null;
+		}
+	}
     
     public void grab(Grabber grab) {
 	this.grab = grab;
@@ -1869,6 +1901,8 @@ public class MapView extends PView implements DTarget, Console.Directory {
 	    if((placing.lastmc == null) || !placing.lastmc.equals(c)) {
 		placing.new Adjust(c, ui.modflags()).run();
 	    }
+	} else if (ui.modshift) {
+		new Peek(c).run();
 	}
     }
     
@@ -1945,6 +1979,9 @@ public class MapView extends PView implements DTarget, Console.Directory {
 	if(selection != null) {
 	    if(selection.tt != null)
 		return(selection.tt);
+	}
+	if(tooltip != null && ui.modshift != true) {
+		tooltip = null;		
 	}
 	return(super.tooltip(c, prev));
     }
