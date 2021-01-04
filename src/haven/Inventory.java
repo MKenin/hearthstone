@@ -31,7 +31,7 @@ import java.awt.image.WritableRaster;
 
 public class Inventory extends Widget implements DTarget {
 	public static final Coord sqsz = UI.scale(new Coord(33, 33));
-	private static final Comparator<WItem> sortTransfer = (WItem w1, WItem w2) -> w1.item.getQuality().compareTo(w2.item.getQuality());
+	private static final Comparator<WItem> sortTransfer = (WItem w1, WItem w2) -> w1.item.getQuality() == null ? 0 :  w1.item.getQuality().compareTo(w2.item.getQuality());
     public static final Tex invsq;
     public boolean dropul = true;
     public Coord isz;
